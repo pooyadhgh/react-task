@@ -1,5 +1,6 @@
 import React from 'react';
-import Product from './components/Product/Product';
+import Header from './components/Header/Header';
+import ProductItem from './components/ProductItem/ProductItem';
 
 class App extends React.Component {
   state = {
@@ -25,12 +26,21 @@ class App extends React.Component {
   render() {
     return (
       <div id="main" className="container">
-        <h1>Grocery List</h1>
-
-        {this.state.fruits.map(fruit => {
-          const { name, quantity, id } = fruit;
-          return <Product key={id} name={name} quantity={quantity} />;
-        })}
+        <Header items={this.state.fruits.length} />
+        <table className="table mt-5">
+          <thead>
+            <tr className="table-dark">
+              <th scope="col">Product Name</th>
+              <th scope="col">Quantity</th>
+            </tr>
+          </thead>
+          <tbody className="table-light">
+            {this.state.fruits.map(fruit => {
+              const { name, quantity, id } = fruit;
+              return <ProductItem key={id} name={name} quantity={quantity} />;
+            })}
+          </tbody>
+        </table>
       </div>
     );
   }
