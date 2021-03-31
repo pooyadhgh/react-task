@@ -4,6 +4,7 @@ import ProductItem from './components/ProductItem/ProductItem';
 
 class App extends React.Component {
   state = {
+    isHidden: false,
     fruits: [
       {
         name: 'apple',
@@ -23,10 +24,63 @@ class App extends React.Component {
     ],
   };
 
+  toggleHandler() {
+    this.setState({ isHidden: !this.state.isHidden });
+  }
+
+  deleteProduct(id) {
+    console.log(id);
+    const clonedFruits = [...this.state.fruits];
+    const selectedFruit = clonedFruits.filter(item => {
+      return item.id !== id;
+    });
+    console.log(selectedFruit);
+  }
+
+  addProduct(id) {
+    const clonedFruits = [...this.state.fruits];
+    const selectedFruit = clonedFruits.find(item => {
+      return item.id === id;
+    });
+    selectedFruit.quantity += 1;
+    this.setState({ fruits: clonedFruits });
+  }
+
+  subtractProduct(id) {
+    const clonedFruits = [...this.state.fruits];
+    const selectedFruit = clonedFruits.find(item => {
+      return item.id === id;
+    });
+    if (selectedFruit.quantity >= 1) {
+      selectedFruit.quantity -= 1;
+      this.setState({ fruits: clonedFruits });
+    }
+  }
+
+  addNewProduct() {}
+
   render() {
+    const allProducts = this.state.fruits.map(fruit => {
+      const { name, quantity, id } = fruit;
+      return (
+        <ProductItem
+          key={id}
+          name={name}
+          quantity={quantity}
+          add={this.addProduct.bind(this, id)}
+          subtract={this.subtractProduct.bind(this, id)}
+        />
+      );
+    });
+
     return (
       <div id="main" className="container">
-        <Header items={this.state.fruits.length} />
+        <Header
+          items={this.state.fruits.length}
+          toggle={this.toggleHandler.bind(this)}
+          isHidden={this.state.isHidden}
+        />
+
         <table className="table mt-5">
           <thead>
             <tr className="table-dark">
@@ -35,10 +89,9 @@ class App extends React.Component {
             </tr>
           </thead>
           <tbody className="table-light">
-            {this.state.fruits.map(fruit => {
-              const { name, quantity, id } = fruit;
-              return <ProductItem key={id} name={name} quantity={quantity} />;
-            })}
+            {this.state.isHidden
+              ? allProducts
+              : 'Click on the button to show products'}
           </tbody>
         </table>
       </div>
