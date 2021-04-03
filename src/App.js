@@ -1,13 +1,16 @@
 import React from 'react';
-import Header from '../components/Header/Header';
-import ProductItem from '../components/ProductItem/ProductItem';
-import ProductList from '../components/ProductList/ProductList';
-import AddNewProduct from '../components/AddNewProduct/AddNewProduct';
+import Container from './hoc/Container';
+import Wrapper from './hoc/Wrapper';
+import Header from './components/Header/Header';
+import ProductList from './components/ProductList/ProductList';
+import Modal from './components/Modal/Modal';
+
 let addedProduct = {};
 
 class App extends React.Component {
   state = {
     isHidden: true,
+    isShowModal: false,
     fruits: [
       {
         name: 'apple',
@@ -30,15 +33,6 @@ class App extends React.Component {
   toggleHandler() {
     this.setState({ isHidden: !this.state.isHidden });
   }
-
-  // deleteProduct(id) {
-  //   console.log(id);
-  //   const clonedFruits = [...this.state.fruits];
-  //   const selectedFruit = clonedFruits.filter(item => {
-  //     return item.id !== id;
-  //   });
-  //   console.log(selectedFruit);
-  // }
 
   addProduct = id => {
     const clonedFruits = [...this.state.fruits];
@@ -72,21 +66,31 @@ class App extends React.Component {
     this.setState({ fruits: addedState });
     e.target.productName.value = '';
     e.target.productQuantity.value = '';
+    this.modalCancleHandler();
+  };
+
+  modalHandler = () => {
+    this.setState({ isShowModal: true });
+  };
+
+  modalCancleHandler = () => {
+    this.setState({ isShowModal: false });
   };
 
   render() {
     return (
-      <div id="main" className="container">
+      <Container>
         <Header
           items={this.state.fruits.length}
           toggle={this.toggleHandler.bind(this)}
           isHidden={this.state.isHidden}
+          modalHandler={this.modalHandler}
         />
 
-        <AddNewProduct
-          formHandler={e => {
-            this.formHandler(e);
-          }}
+        <Modal
+          isShowModal={this.state.isShowModal}
+          formHandler={e => this.formHandler(e)}
+          cancelHandler={() => this.modalCancleHandler()}
         />
 
         <table className="table mt-5">
@@ -108,9 +112,9 @@ class App extends React.Component {
             )}
           </tbody>
         </table>
-      </div>
+      </Container>
     );
   }
 }
 
-export default App;
+export default Wrapper(App, 'container');
