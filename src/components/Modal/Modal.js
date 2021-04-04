@@ -1,6 +1,6 @@
-import react from 'react';
 import styles from '../Modal/Modal.module.css';
 import AddNewProduct from '../AddNewProduct/AddNewProduct';
+
 const Modal = props => {
   return (
     <div>

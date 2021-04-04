@@ -11,7 +11,9 @@ const Header = props => {
       <button className="btn btn-primary m-2" onClick={props.toggle}>
         {props.isHidden ? 'Hide Products' : 'Show Products'}
       </button>
-      <button className="btn btn-danger">Clear List</button>
+      <button className="btn btn-danger" onClick={props.removeAll}>
+        Clear List
+      </button>
     </div>
   );
 };

@@ -5,6 +5,9 @@ import Header from './components/Header/Header';
 import ProductList from './components/ProductList/ProductList';
 import Modal from './components/Modal/Modal';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 let addedProduct = {};
 
 class App extends React.Component {
@@ -32,6 +35,9 @@ class App extends React.Component {
 
   toggleHandler() {
     this.setState({ isHidden: !this.state.isHidden });
+    this.state.isHidden
+      ? toast.info('Products are now hidden')
+      : toast.info('Products are now visible');
   }
 
   addProduct = id => {
@@ -67,6 +73,7 @@ class App extends React.Component {
     e.target.productName.value = '';
     e.target.productQuantity.value = '';
     this.modalCancleHandler();
+    toast.success('A new product is added sucessfully');
   };
 
   modalHandler = () => {
@@ -77,6 +84,11 @@ class App extends React.Component {
     this.setState({ isShowModal: false });
   };
 
+  removeAllProducts = () => {
+    this.setState({ fruits: [] });
+    toast.error('All of the products were removed');
+  };
+
   render() {
     return (
       <Container>
@@ -85,6 +97,7 @@ class App extends React.Component {
           toggle={this.toggleHandler.bind(this)}
           isHidden={this.state.isHidden}
           modalHandler={this.modalHandler}
+          removeAll={this.removeAllProducts}
         />
 
         <Modal
@@ -112,6 +125,8 @@ class App extends React.Component {
             )}
           </tbody>
         </table>
+
+        <ToastContainer />
       </Container>
     );
   }
